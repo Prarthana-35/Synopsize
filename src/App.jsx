@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import React from "react";
 import {useState} from 'react';
 import axios from "axios";
@@ -10,7 +13,9 @@ function App(){
     setText(e.target.value);
   }
 
-  const summarize = async() => {
+  const summarize = async () => {
+
+   const apiKey = import.meta.env.VITE_RAPIDAPI_KEY; 
     const options = {
       method: 'GET',
       url: 'https://article-extractor-and-summarizer.p.rapidapi.com/summarize',
@@ -20,14 +25,19 @@ function App(){
         engine: '2'
       },
       headers: {
-        'x-rapidapi-key': '58e51ad4admshbcaefe682a1518ep1afbd6jsn6a7eac1655b0',
+        'x-rapidapi-key': apiKey,  
         'x-rapidapi-host': 'article-extractor-and-summarizer.p.rapidapi.com'
       }
     };
-    const response = await axios.request(options);
-    setSummary(response.data.summary);
-  }
-
+  
+    try {
+      const response = await axios.request(options);
+      setSummary(response.data.summary);
+    } catch (error) {
+      console.error("Error fetching summary:", error);
+    }
+  };
+  
   return(
     <div className="text-gray-800 text-xl">
       <div className="h-screen w-screen bg-slate-300 flex items-center justify-center flex-col">
